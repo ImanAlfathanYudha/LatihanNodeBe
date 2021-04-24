@@ -1,4 +1,4 @@
-const db = require("../models");
+const db = require("../model");
 const Tutorial = db.tutorials;
 const Op = db.Sequelize.Op;
 
@@ -34,17 +34,24 @@ exports.create = (req, res) => {
 
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
+	console.log("tes findAll invoked")
   const title = req.query.title;
   var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
 
   Tutorial.findAll({ where: condition })
     .then(data => {
-      res.send(data);
+      console.log("tes findAll bisa ",data)
+      res.status(200).send({
+      status:200,
+      tutorials:data,	
+    });
     })
     .catch(err => {
+      console.log("tes findAll KAGA BISA ",err)
       res.status(500).send({
+      	status:500,
         message:
-          err.message || "Some error occurred while retrieving tutorials."
+          err.message || "Ada error ketika mengambil data tutorial."
       });
     });
 };
@@ -54,7 +61,7 @@ exports.findOne = (req, res) => {
   const id = req.params.id;
 
   Tutorial.findByPk(id)
-    .then(data => {
+    .then(data => {    	
       res.send(data);
     })
     .catch(err => {
