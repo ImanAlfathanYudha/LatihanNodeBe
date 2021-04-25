@@ -34,20 +34,17 @@ exports.create = (req, res) => {
 
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
-	console.log("tes findAll invoked")
   const title = req.query.title;
   var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
 
   Tutorial.findAll({ where: condition })
     .then(data => {
-      console.log("tes findAll bisa ",data)
       res.status(200).send({
       status:200,
       tutorials:data,	
     });
     })
     .catch(err => {
-      console.log("tes findAll KAGA BISA ",err)
       res.status(500).send({
       	status:500,
         message:
@@ -62,10 +59,14 @@ exports.findOne = (req, res) => {
 
   Tutorial.findByPk(id)
     .then(data => {    	
-      res.send(data);
+     res.status(200).send({
+      status:200,
+      tutorial:data,	
+    });
     })
     .catch(err => {
       res.status(500).send({
+      	status:500,
         message: "Error retrieving Tutorial with id=" + id
       });
     });
@@ -142,7 +143,10 @@ exports.deleteAll = (req, res) => {
 exports.findAllPublished = (req, res) => {
   Tutorial.findAll({ where: { published: true } })
     .then(data => {
-      res.send(data);
+      res.status(200).send({
+      status:200,
+      tutorial:data,	
+    });
     })
     .catch(err => {
       res.status(500).send({
