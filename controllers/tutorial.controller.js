@@ -22,7 +22,10 @@ exports.create = (req, res) => {
   // Save Tutorial in the database
   Tutorial.create(tutorial)
     .then(data => {
-      res.send(data);
+      res.status(200).send({
+	      status:200,
+	      message:"Tutorial successfully added to DB"
+    });
     })
     .catch(err => {
       res.status(500).send({
@@ -81,17 +84,20 @@ exports.update = (req, res) => {
   })
     .then(num => {
       if (num == 1) {
-        res.send({
-          message: "Tutorial was updated successfully."
-        });
+        res.status(200).send({
+	      status:200,
+	      message:`Tutorial with id=${id} successfully edited.`
+    });
       } else {
-        res.send({
+        res.status(500).send({
+          status:500,
           message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found or req.body is empty!`
         });
       }
     })
     .catch(err => {
       res.status(500).send({
+      	status:500,
         message: "Error updating Tutorial with id=" + id
       });
     });
@@ -106,17 +112,20 @@ exports.delete = (req, res) => {
   })
     .then(num => {
       if (num == 1) {
-        res.send({
-          message: "Tutorial was deleted successfully!"
+        res.status(200).send({
+          status:200,
+          message: `Tutorial with id=${id} was successfully deleted.`
         });
       } else {
-        res.send({
+        res.status(500).send({
+          status:500,
           message: `Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`
         });
       }
     })
     .catch(err => {
       res.status(500).send({
+      	status:500,
         message: "Could not delete Tutorial with id=" + id
       });
     });
