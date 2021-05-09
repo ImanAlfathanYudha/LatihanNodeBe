@@ -164,3 +164,32 @@ exports.findAllPublished = (req, res) => {
       });
     });
 };
+
+exports.pulishTutorial = (req, res) => {
+  const id = req.params.id;
+
+ Tutorial.update({ published: 1 }, {
+  where: {
+    id: id
+	  }
+	})
+    .then(num => {
+      if (num == 1) {
+        res.status(200).send({
+	      status:200,
+	      message:`Tutorial with id=${id} successfully published.`
+    });
+      } else {
+        res.status(500).send({
+          status:500,
+          message: `Cannot publish Tutorial with id=${id}! Maybe Tutorial was not found or tuorial already published.`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+      	status:500,
+        message: "Error publishing Tutorial with id=" + id
+      });
+    });
+};
