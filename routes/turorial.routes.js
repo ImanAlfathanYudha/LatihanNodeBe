@@ -25,7 +25,10 @@ module.exports = app => {
   router.delete("/", tutorials.deleteAll);
 
   //Publish tutorial
-  router.put("/publish/:id", tutorials.pulishTutorial);
+  router.put("/publish/:id", tutorials.publishTutorial);
+
+  //Unpublish tutorial
+  router.put("/unpublish/:id", tutorials.unpublishTutorial);
 
   app.use('/api/tutorials', router);
 };
