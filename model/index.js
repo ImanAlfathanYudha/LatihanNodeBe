@@ -20,5 +20,13 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.tutorials = require("./tutorial.model.js")(sequelize, Sequelize);
+db.posts = require("./post.model.js")(sequelize, Sequelize);
+db.comments = require("./comment.model.js")(sequelize, Sequelize);
+
+db.posts.hasMany(db.comments, { as: "comments" });
+db.comments.belongsTo(db.posts, {
+  foreignKey: "id_post",
+  as: "post",
+});
 
 module.exports = db;

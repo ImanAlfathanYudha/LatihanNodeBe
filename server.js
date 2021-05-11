@@ -25,6 +25,7 @@ db.sequelize.sync();
 // });
 
 require("./routes/turorial.routes")(app);
+require("./routes/post.routes")(app);
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
