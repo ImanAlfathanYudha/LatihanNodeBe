@@ -42,7 +42,9 @@ exports.findAll = (req, res) => {
     .then(data => {
       res.status(200).send({
       status:200,
-      tutorials:data,	
+      data:{
+      	post:data,	
+      }
     });
     })
     .catch(err => {
@@ -54,3 +56,21 @@ exports.findAll = (req, res) => {
     });
 };
 
+// Find a single Tutorial with an id
+exports.findPostById = (req, res) => {
+  const id = req.params.id;
+
+  Post.findByPk(id)
+    .then(data => {    	
+     res.status(200).send({
+      status:200,
+      post:data,	
+    });
+    })
+    .catch(err => {
+      res.status(500).send({
+      	status:500,
+        message: "Error retrieving post with id=" + id
+      });
+    });
+};
