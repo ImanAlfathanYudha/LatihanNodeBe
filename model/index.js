@@ -20,11 +20,11 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.tutorials = require("./tutorial.model.js")(sequelize, Sequelize);
-db.posts = require("./post.model.js")(sequelize, Sequelize);
-db.comments = require("./comment.model.js")(sequelize, Sequelize);
+db.post = require("./post.model.js")(sequelize, Sequelize);
+db.comment = require("./comment.model.js")(sequelize, Sequelize);
 
-db.posts.hasMany(db.comments, { as: "comments" });
-db.comments.belongsTo(db.posts, {
+db.post.hasMany(db.comment, { as: "comment" });
+db.comment.belongsTo(db.post, {
   foreignKey: "id_post",
   as: "post",
 });

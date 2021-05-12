@@ -13,13 +13,5 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.DATE
     }
   });
-  
-
-  Post.hasMany(Comment, { as: "comments" });
-    Comment.belongsTo(Post, {
-      foreignKey: "id_post",
-      as: "post",
-    });
-
   return Post;
 };
