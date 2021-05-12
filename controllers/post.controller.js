@@ -1,6 +1,7 @@
-const db = require("../models");
-const Post = db.posts;
-const Comment = db.comments;
+const db = require("../model");
+const Post = db.post;
+const Comment = db.comment;
+const { Op } = require("sequelize");
 
 exports.createPost = (tutorial) => {
   // Validate request
@@ -17,7 +18,7 @@ exports.createPost = (tutorial) => {
     body: req.body.body,
   };
 
-  // Save Tutorial in the database
+  // Save Post in the database
   Post.create(post)
     .then(data => {
       res.status(200).send({
@@ -33,26 +34,23 @@ exports.createPost = (tutorial) => {
     });
 };
 
-exports.findAll = () => {
-  return Post.findAll({
-    include: ["comments"],
-  }).then((tutorials) => {
-    return tutorials;
-  });
+exports.findAll = (req, res) => {
+  const title = req.query.title;
+  var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
 
-
+  Post.findAll({ where: condition })
+    .then(data => {
+      res.status(200).send({
+      status:200,
+      tutorials:data,	
+    });
+    })
+    .catch(err => {
+      res.status(500).send({
+      	status:500,
+        message:
+          err.message || "Ada error ketika mengambil data post."
+      });
+    });
 };
 
- // .then(data => {
- //      res.status(200).send({
- //      status:200,
- //      tutorials:data,	
- //    });
- //    })
- //    .catch(err => {
- //      res.status(500).send({
- //      	status:500,
- //        message:
- //          err.message || "Ada error ketika mengambil data tutorial."
- //      });
- //    });
