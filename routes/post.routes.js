@@ -9,5 +9,8 @@ module.exports = app => {
   // Retrieve all Tutorials
   router.get("/", posts.findAll);
 
+  // Retrieve a single Tutorial with id
+  router.get("/:id", posts.findPostById);
+
   app.use('/api/post', router);
 };

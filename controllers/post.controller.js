@@ -64,7 +64,9 @@ exports.findPostById = (req, res) => {
     .then(data => {    	
      res.status(200).send({
       status:200,
-      post:data,	
+      data:{
+      	post:data,		
+      }
     });
     })
     .catch(err => {
