@@ -61,7 +61,12 @@ exports.findPostById = (req, res) => {
   const id = req.params.id;
 
   Post.findByPk(id)
-    .then(data => {    	
+    .then(data => {    
+     const users = await sequelize.query("SELECT * FROM `comments` where 'comments'.id_post= :id_post", {
+	     replacements: { id_post: id },	
+	     type: QueryTypes.SELECT, 
+	 	 model: comment,
+ 	 });	
      res.status(200).send({
       status:200,
       data:{
