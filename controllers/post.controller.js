@@ -1,7 +1,7 @@
 const db = require("../model");
 const Post = db.post;
 const Comment = db.comment;
-const { Op } = require("sequelize");
+const { Op, sequelize, QueryTypes } = require("sequelize");
 
 exports.createPost = (tutorial) => {
   // Validate request
@@ -57,22 +57,37 @@ exports.findAll = (req, res) => {
 };
 
 // Find a single Tutorial with an id
-exports.findPostById = (req, res) => {
+exports.findPostById = async (req, res) => {
   const id = req.params.id;
-
-  Post.findByPk(id)
-    .then(data => {    
-     const users = await sequelize.query("SELECT * FROM `comments` where 'comments'.id_post= :id_post", {
+  const getCommentById = function() {
+  	 var comments =  db.sequelize.query("SELECT * FROM comments where comments.id_post= :id_post", {
 	     replacements: { id_post: id },	
-	     type: QueryTypes.SELECT, 
-	 	 model: comment,
- 	 });	
-     res.status(200).send({
-      status:200,
-      data:{
-      	post:data,		
-      }
-    });
+	     type: db.sequelize.QueryTypes.SELECT, 
+	 	 model: Comment,
+ 	 }).then (data => {
+	  	return JSON.stringify(data)
+	 })
+  }
+  Post.findByPk(id)
+    .then(dataPost => {
+     db.sequelize.query("SELECT * FROM comments where comments.id_post= :id_post", {
+	     replacements: { id_post: id },	
+	     type: db.sequelize.QueryTypes.SELECT, 
+	 	 model: Comment,
+ 	 }).then (dataComment => {
+	  	res.status(200).send({
+	      status:200,
+	      data:{
+	      	post:dataPost,
+	      	comments:dataComment
+	      }
+    	});
+		 }).catch(err => {
+	      res.status(500).send({
+	      	status:500,
+	        message: "Error retrieving comment with id_post=" + id
+	      });
+	    }); 	
     })
     .catch(err => {
       res.status(500).send({
