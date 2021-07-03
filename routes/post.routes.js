@@ -12,5 +12,9 @@ module.exports = app => {
   // Retrieve a single Tutorial with id
   router.get("/:id", posts.findPostById);
 
+  // Create a new comment
+  router.post("/comment/create", posts.createComment);
+
   app.use('/api/post', router);
+  //Contoh akses ke url: http://localhost:8080/api/post/
 };

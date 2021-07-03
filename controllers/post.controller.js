@@ -3,7 +3,7 @@ const Post = db.post;
 const Comment = db.comment;
 const { Op, sequelize, QueryTypes } = require("sequelize");
 
-exports.createPost = () => {
+exports.createPost = (req, res) => {
   // Validate request
   if (!req.body.title && !req.body.id_user) {
     res.status(400).send({
@@ -87,7 +87,7 @@ exports.findPostById = async (req, res) => {
 	      	status:500,
 	        message: "Error retrieving comment with id_post=" + id
 	      });
-	    }); 	
+	    });
     })
     .catch(err => {
       res.status(500).send({
@@ -97,8 +97,9 @@ exports.findPostById = async (req, res) => {
     });
 };
 
-exports.createComment = () => {
+exports.createComment = (req, res) => {
   // Validate request
+  console.log("Tes createComment ",req.body)
   if (!req.body.body) {
     res.status(400).send({
       message: "Don't give an empty comment!"
@@ -106,8 +107,8 @@ exports.createComment = () => {
     return;
   }
 
-  const comment = {
-    id_post: req.body.id_posts,
+  const comment= {
+    id_post: req.body.id_post,
     body: req.body.body,
   };
 
@@ -125,4 +126,21 @@ exports.createComment = () => {
           err.message || "Some error occurred while creating the comment."
       });
     });
+  
+  // db.sequelize.query("INSERT INTO comments (id_post, body)  VALUES ('${comment.id_post}' , '${comment.id_post}')" , {
+	 //     type: db.sequelize.QueryTypes.INSERT,
+	 //     model: Comment
+ 	//  }).then (dataComment => {
+ 	//  	console.log("Tes berhasil dataComment ",dataComment)
+	 //   res.status(200).send({
+	 //      status:200,
+	 //      message:"Comment successfully added to DB"
+  //   	});
+		//  }).catch(err => {
+		//  	console.log("Tes err ",err)
+	 //     res.status(500).send({
+  //       message:
+  //         err.message || "Some error occurred while creating the comment."
+  //     });
+  // });
 };
