@@ -97,6 +97,34 @@ exports.findPostById = async (req, res) => {
     });
 };
 
+// Update a Tutorial by the id in the request
+exports.updatePost = (req, res) => {
+  const id = req.params.id;
+
+  Post.update(req.body, {
+    where: { id: id }
+  })
+    .then(num => {
+      if (num == 1) {
+        res.status(200).send({
+	      status:200,
+	      message:`Post with id=${id} successfully edited.`
+    });
+      } else {
+        res.status(500).send({
+          status:500,
+          message: `Cannot update Post with id=${id}. Maybe Tutorial was not found or req.body is empty!`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).send({
+      	status:500,
+        message: "Error updating Tutorial with id=" + id
+      });
+    });
+};
+
 exports.createComment = (req, res) => {
   // Validate request
   console.log("Tes createComment ",req.body)
